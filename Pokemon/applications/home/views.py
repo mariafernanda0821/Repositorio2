@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated , AllowAny
 from rest_framework.generics import(
     ListAPIView, CreateAPIView, UpdateAPIView, RetrieveUpdateAPIView,  ListCreateAPIView,
     DestroyAPIView, RetrieveDestroyAPIView,
@@ -17,22 +19,26 @@ from .models import (
 
 )
 
-#VISTA DE DESCRIPCION DE CADA POKEMON QUE INDIUES
+
+#VISTA DE DESCRIPCION DE CADA POKEMON => Pokemon specie detail
 class DescripcionPokemon(ListAPIView):
 
     serializer_class = PokemonDescripcionSerializer
+    permission_classes = [AllowAny, ]
 
     def get_queryset(self):
-        
+
         pokemon_id = self.kwargs['pk'] 
 
         return Pokemon.objects.detalles_pokemon(pokemon_id)
 
 
-#VISTA DE CAPTURAR UN POKEMON
+#VISTA DE CAPTURAR UN POKEMON =>  Pokemon catch
 class CapturarPokemon(CreateAPIView):
 
     serializer_class = CapturarPokemomSerializer
+    #authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAuthenticated, ]
 
     def create(self, request , *args, **kwargs):
 
@@ -65,13 +71,15 @@ class CapturarPokemon(CreateAPIView):
             )
 
 
-#VISTA MOSTRAR LOS POKEMONES CAPTURADOS Y ESTE EN LA FIESTA
+#VISTA MOSTRAR LOS POKEMONES CAPTURADOS Y incluida lo de la FIESTA (usuario) => Pokemon Storage
 class MostrarPokemonCapturados(ListAPIView):
     serializer_class = PokemonCapturadoSerializer
     pagination_class = PagSerializer
+    #authentication_classes = (TokenAuthentication, )
+    permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
-        return AlmacenPokemonCapturado.objects.filter(is_party_member= True)
+        return AlmacenPokemonCapturado.objects.all()
     
 
 class MostrarPokemonCapturadosPorLink(ListAPIView):
@@ -82,59 +90,14 @@ class MostrarPokemonCapturadosPorLink(ListAPIView):
         return AlmacenPokemonCapturado.objects.filter(is_party_member= True)
     
 
-#VISTA DE REGIONES
-class ListarRegiones(ListAPIView):
-
-    serializer_class = RegionSerializer
-    #queryset = Region.objects.regiones()
-
-    def  get_queryset(self):
-        return Region.objects.all()
-    
-
-#VISTA DE REGIONES CON DETALLADAS => 
-class ListarLocationRegion(ListAPIView):
-    serializer_class = RegionLocationSerializer
-
-    def get_queryset(self):
-        region_id = self.kwargs['pk'] 
-
-        return Region.objects.filter(id = region_id)
-
-
-
-#VISTA DE LOCATIONS DETALLADAS
-class DetailLocations(ListAPIView):
-    serializer_class = DetallarLocationsSerializer
-
-    def get_queryset(self):
-        
-        location_id = self.kwargs['pk']
-
-        return Location.objects.filter(id = location_id)
-
-
-#VISTA DE LOCATIONS DETALLADAS
-class DetailArea(ListAPIView):
-    serializer_class = DetailAreaSerializer
-
-    def get_queryset(self):
-        
-        area_id = self.kwargs['pk']
-
-        return Area.objects.filter(id = area_id)
-        #return  Area.objects.all()
-
-#class DetallarArea(ListCreateAPIView):
- #   serializer_class = DetailAreaSerializer
-
-
-#VISTA DE UDPATE ALMACEN DE POKEMON
+#VISTA DE UDPATE ALMACEN DE POKEMON => Pokemon rename
 class AlmacenPokemonUpdateView(UpdateAPIView): 
 #class AlmacenPokemonUpdateView(RetrieveUpdateAPIView): 
 
     serializer_class = UpdateAlmacenPokemon
     queryset = AlmacenPokemonCapturado.objects.all()
+    #authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAuthenticated, ]
 
    # def get_queryset(self):
     #    x = AlmacenPokemonCapturado.objects.get(id = self.kwargs['pk'])
@@ -163,3 +126,53 @@ class DeletePokemon(DestroyAPIView):
 
     serializer_class = RegionSerializer
     queryset = Region.objects.all()
+
+
+
+#VISTA DE REGIONES => Regions list
+class DetailRegiones(ListAPIView):
+
+    serializer_class = RegionSerializer
+    permission_classes = [AllowAny, ] 
+    #queryset = Region.objects.regiones()
+
+    def  get_queryset(self):
+        return Region.objects.all()
+    
+
+#VISTA DE REGIONES CON DETALLADAS => Regions detail
+class DetailRegionLocation(ListAPIView):
+    serializer_class = RegionLocationSerializer
+    permission_classes = [AllowAny, ] 
+
+    def get_queryset(self):
+        region_id = self.kwargs['pk'] 
+
+        return Region.objects.filter(id = region_id)
+
+
+
+#VISTA DE LOCATIONS DETALLADAS => Location detail
+class DetailLocations(ListAPIView):
+    serializer_class = DetallarLocationsSerializer
+    permission_classes = [AllowAny, ] 
+
+    def get_queryset(self):
+        
+        location_id = self.kwargs['pk']
+
+        return Location.objects.filter(id = location_id)
+
+
+#VISTA DE LOCATIONS DETALLADAS => Area detail
+class DetailArea(ListAPIView):
+    serializer_class = DetailAreaSerializer
+    permission_classes = [AllowAny, ] 
+
+    def get_queryset(self):
+        
+        area_id = self.kwargs['pk']
+
+        return Area.objects.filter(id = area_id)
+        #return  Area.objects.all()
+

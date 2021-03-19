@@ -28,7 +28,7 @@ urlpatterns = [
     #==============******==============
 
     path(
-        'detailpokemon/<pk>/', #​ ['GET'​] /pokemons/<int:pk>/
+        'pokemons/<pk>/', #​ ['GET'​] /pokemons/<int:pk>/
         views.DescripcionPokemon.as_view(),
         name= 'pokemon_descripcion', 
     ), 
@@ -52,12 +52,12 @@ urlpatterns = [
 
     path(
         'regions/', #[​ 'GET'​ ] /regions/
-        views.ListarRegiones.as_view(),
+        views.DetailRegiones.as_view(),
         name= 'listar_regiones'
     ),
     path(
         'regions/<pk>/', #[​ 'GET'​ ] /regions/<pk>
-        views.ListarLocationRegion.as_view(),
+        views.DetailRegionLocation.as_view(),
         name= 'listar_regiones_location'
     ),
     path(
