@@ -25,12 +25,42 @@ class DescripcionPokemon(ListAPIView):
 
     serializer_class = PokemonDescripcionSerializer
     permission_classes = [AllowAny, ]
+    http_method_names = ['get']
 
     def get_queryset(self):
 
         pokemon_id = self.kwargs['pk'] 
 
         return Pokemon.objects.detalles_pokemon(pokemon_id)
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        `.dispatch()` is pretty much the same as Django's regular dispatch,
+        but with extra hooks for startup, finalize, and exception handling.
+        """
+        self.args = args
+        self.kwargs = kwargs
+        request = self.initialize_request(request, *args, **kwargs)
+        self.request = request
+        self.headers = self.default_response_headers  # deprecate?
+
+        try:
+            self.initial(request, *args, **kwargs)
+
+            # Get the appropriate handler method
+            if request.method.lower() in self.http_method_names:
+                handler = getattr(self, request.method.lower(),
+                                  self.http_method_not_allowed)
+            else:
+                handler = self.http_method_not_allowed
+
+            response = handler(request, *args, **kwargs)
+
+        except Exception as exc:
+            response = self.handle_exception(exc)
+
+        self.response = self.finalize_response(request, response, *args, **kwargs)
+        return self.response
 
 
 #VISTA DE CAPTURAR UN POKEMON =>  Pokemon catch
@@ -39,6 +69,8 @@ class CapturarPokemon(CreateAPIView):
     serializer_class = CapturarPokemomSerializer
     #authentication_classes = (TokenAuthentication,)
     permission_classes = [IsAuthenticated, ]
+    http_method_names = ['post', ]
+
 
     def create(self, request , *args, **kwargs):
 
@@ -77,6 +109,7 @@ class MostrarPokemonCapturados(ListAPIView):
     pagination_class = PagSerializer
     #authentication_classes = (TokenAuthentication, )
     permission_classes = [IsAuthenticated, ]
+    http_method_names = ['get', ]
 
     def get_queryset(self):
         return AlmacenPokemonCapturado.objects.all()

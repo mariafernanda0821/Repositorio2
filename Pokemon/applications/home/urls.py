@@ -34,13 +34,15 @@ urlpatterns = [
     ), 
 
     path(
-        'capturar-pokemon/',  #[​'POST'​] /pokemons/own/
+        #'capturar-pokemon/',  #[​'POST'​] /pokemons/own/
+        'pokemons1/own/', 
         views.CapturarPokemon.as_view(),
         name = 'capturar_pokemon',
     ),
 
     path(
-        'mostrar-pokemon-capturado/', #[​'GET'​] /pokemons/own/
+        #'mostrar-pokemon-capturado/', #[​'GET'​] /pokemons/own/
+        'pokemons2/own/', 
         views.MostrarPokemonCapturados.as_view(),
         name= 'mostrar_pokemon_capturado',
     ),
@@ -51,28 +53,7 @@ urlpatterns = [
     ),
 
     path(
-        'regions/', #[​ 'GET'​ ] /regions/
-        views.DetailRegiones.as_view(),
-        name= 'listar_regiones'
-    ),
-    path(
-        'regions/<pk>/', #[​ 'GET'​ ] /regions/<pk>
-        views.DetailRegionLocation.as_view(),
-        name= 'listar_regiones_location'
-    ),
-    path(
-        'locations/<pk>/', #[​ 'GET'​ ] /locations/<pk>
-        views.DetailLocations.as_view(),
-        name= 'listar_locations'
-    ),
-    path(
-        'areas/<pk>/', #[​ 'GET'​ ] /areas/<int:pk>/
-        views.DetailArea.as_view(),
-        name= 'listar_locations'
-        ),
-
-    path(
-        'pokemons/own/<int:pk>/', #[​ 'PUT'​ , ​ 'PATCH'​ ] /pokemons/own/<int:pk>/ UpdateAPIView
+        'pokemonss/own/<int:pk>/', #[​ 'PUT'​ , ​ 'PATCH'​ ] /pokemons/own/<int:pk>/ UpdateAPIView
         views.AlmacenPokemonUpdateView.as_view(),
         name= 'update_almace_pokemon'
         ),
@@ -82,5 +63,27 @@ urlpatterns = [
         name= 'habilidad2'
         ),
 
+    path(
+        'regions/', #[​ 'GET'​ ] /regions/
+        views.DetailRegiones.as_view(),
+        name= 'listar_regiones'
+    ),
 
+    path(
+        'regions/<pk>/', #[​ 'GET'​ ] /regions/<pk>
+        views.DetailRegionLocation.as_view(),
+        name= 'listar_regiones_location'
+    ),
+
+    path(
+        'locations/<pk>/', #[​ 'GET'​ ] /locations/<pk>
+        views.DetailLocations.as_view(),
+        name= 'listar_locations'
+    ),
+
+    path(
+        'areas/<pk>/', #[​ 'GET'​ ] /areas/<int:pk>/
+        views.DetailArea.as_view(),
+        name= 'listar_locations'
+        ),
 ]

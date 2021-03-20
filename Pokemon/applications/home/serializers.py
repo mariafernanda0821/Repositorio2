@@ -69,9 +69,10 @@ class StatsSerializer(serializers.ModelSerializer):
 
 class PokemonDescripcionSerializer(serializers.ModelSerializer):
     
-    habilidad = HabilidadSerializer(many = True)
-    move = MoveSerializer(many= True)
-    types = TypesSerializer(many = True)
+    #habilidad = HabilidadSerializer(many = True) 
+    habilidad = serializers.SerializerMethodField()
+    move = serializers.SerializerMethodField()
+    types =serializers.SerializerMethodField()
     sprites = SpritesSerializer()
     stats = StatsSerializer()
     #habilidads = serializers.SerializerMethodField() 
@@ -79,6 +80,7 @@ class PokemonDescripcionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pokemon
         fields = (
+            'id',
             "pokemon_name" ,
             "pokemon_capture_rate" , 
             "pokemon_color" ,
@@ -91,7 +93,39 @@ class PokemonDescripcionSerializer(serializers.ModelSerializer):
             "sprites",
             "stats",
         )
+
+    def get_habilidad(self, obj):
+        #print(===>, obj.habilidad)
+        hab = []
+        query = Habilidades.objects.filter(pokemon= obj.id).values("habilidad_name")
+        
+        for x in query:
+            #print(x["habilidad_name"])
+            hab.append(x['habilidad_name'])
+        #print("==>", hab)
+        return hab
+    
+    def get_move(self, obj):
+        #print(===>, obj.habilidad)
+        move = []
+        query = Moves.objects.filter(pokemon= obj.id).values("moves_name")
+        
+        for x in query:
+            #print(x["habilidad_name"])
+            move.append(x['moves_name'])
+        #print("==>", hab)
+        return move
  
+    def get_types(self, obj):
+        #print(===>, obj.habilidad)
+        types = []
+        query = Types.objects.filter(pokemon= obj.id).values("types_name")
+        
+        for x in query:
+            #print(x["habilidad_name"])
+            types.append(x['types_name'])
+        #print("==>", hab)
+        return types
 
 class CapturarPokemomSerializer(serializers.Serializer):
 
