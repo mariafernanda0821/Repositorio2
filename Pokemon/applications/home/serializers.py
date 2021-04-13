@@ -274,7 +274,6 @@ class DetailAreaSerializer(serializers.ModelSerializer):
         return query
 
 
-
 class UpdateAlmacenPokemon(serializers.Serializer):
 
     nick_name = serializers.CharField()

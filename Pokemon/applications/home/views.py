@@ -25,7 +25,7 @@ class DescripcionPokemon(ListAPIView):
 
     serializer_class = PokemonDescripcionSerializer
     permission_classes = [AllowAny, ]
-    http_method_names = ['get']
+    http_method_names = ['get', ]
 
     def get_queryset(self):
 
