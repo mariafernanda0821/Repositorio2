@@ -30,8 +30,8 @@ def Cargar_Localidad(request):
         if  Location.objects.filter(location_name = location["name"]).exists():
             continue
         else:
-            region_id = Region.objects.filter(region_name =location["region"]).values("id")
-            l = Location.objects.create(location_name = location["name"], region_id = region_id)
+            region_id = Region.objects.filter(region_name =location["region"]).first()
+            l = Location.objects.create(location_name = location["name"], region_id = region_id.id)
             l.save()
             print(l) 
     data = True
@@ -106,7 +106,7 @@ def Cargar_Pokemon(request):
                     print("Habilidad===>", ha)
                     print("=============")
                 
-                habilidad_id = Habilidades.objects.get(habilidad_name =habilidad)
+                habilidad_id = Habilidades.objects.get(habilidad_name = habilidad)
                 p.habilidad.add(habilidad_id)
             
 
@@ -132,11 +132,12 @@ def Cargar_Pokemon(request):
                     print("=============")
 
                 
-                type_id = Types.objects.get(types_name =movimiento)
+                type_id = Types.objects.get(types_name =tipo)
                 p.move.add(type_id) 
 
 
         p.save()
+        
     data = True
     print(data)
         
