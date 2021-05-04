@@ -45,3 +45,10 @@ class HabilidadUpdateView(RetrieveUpdateAPIView):
 class Habilidad2UpdateView(UpdateAPIView):
     serializer_class = HabilidadSerializer
     queryset = Habilidades.objects.all()
+
+
+{
+"specie":100,
+"nick_name":"fernanda",
+"is_party_member":true
+}

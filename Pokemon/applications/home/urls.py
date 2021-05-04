@@ -28,14 +28,14 @@ urlpatterns = [
     #==============******==============
 
     path(
-        'pokemons/<pk>/', #​ ['GET'​] /pokemons/<int:pk>/
+        'pokemonsA/<pk>/', #​ ['GET'​] /pokemons/<int:pk>/
         views.DescripcionPokemon.as_view(),
         name= 'pokemon_descripcion', 
     ), 
 
     path(
         #'capturar-pokemon/',  #[​'POST'​] /pokemons/own/
-        'pokemons1/own/', 
+        'pokemons/own/', 
         views.CapturarPokemon.as_view(),
         name = 'capturar_pokemon',
     ),
@@ -46,6 +46,7 @@ urlpatterns = [
         views.MostrarPokemonCapturados.as_view(),
         name= 'mostrar_pokemon_capturado',
     ),
+
     path(
         'mostrar-pokemon-capturado-link/', #[​'GET'​] /pokemons/own/
         views.MostrarPokemonCapturadosPorLink.as_view(),
@@ -53,36 +54,36 @@ urlpatterns = [
     ),
 
     path(
-        'pokemonss/own/<int:pk>/', #[​ 'PUT'​ , ​ 'PATCH'​ ] /pokemons/own/<int:pk>/ UpdateAPIView
+        'pokemonsA/own/<int:pk>/', #[​ 'PUT'​ , ​ 'PATCH'​ ] /pokemons/own/<int:pk>/ UpdateAPIView
         views.AlmacenPokemonUpdateView.as_view(),
         name= 'update_almace_pokemon'
         ),
     path(
-        'delete/<int:pk>/', #[​ 'PUT'​ , ​ 'PATCH'​ ] /pokemons/own/<int:pk>/ UpdateAPIView
+        'delete/<int:pk>/', #[​ 'PUT'​ , ​ 'PATCH'​ ] /pokemons/own/<int:pk>/delete
         views.DeletePokemon.as_view(),
         name= 'habilidad2'
         ),
 
     path(
-        'regions/', #[​ 'GET'​ ] /regions/
+        'regionsA/', #[​ 'GET'​ ] /regions/
         views.DetailRegiones.as_view(),
         name= 'listar_regiones'
     ),
 
     path(
-        'regions/<pk>/', #[​ 'GET'​ ] /regions/<pk>
+        'regionsA/<pk>/', #[​ 'GET'​ ] /regions/<pk>
         views.DetailRegionLocation.as_view(),
         name= 'listar_regiones_location'
     ),
 
     path(
-        'locations/<pk>/', #[​ 'GET'​ ] /locations/<pk>
+        'locationsA/<pk>/', #[​ 'GET'​ ] /locations/<pk>
         views.DetailLocations.as_view(),
         name= 'listar_locations'
     ),
 
     path(
-        'areas/<pk>/', #[​ 'GET'​ ] /areas/<int:pk>/
+        'areasA/<pk>/', #[​ 'GET'​ ] /areas/<int:pk>/
         views.DetailArea.as_view(),
         name= 'listar_locations'
         ),
