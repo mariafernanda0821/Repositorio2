@@ -27,6 +27,7 @@ class HabilidadSerializer(serializers.ModelSerializer):
     #     #a = Habilidades.objects.filter(id = obj.id).values("habilidad_name")
     #     return str(obj.id) + " " +  obj.habilidad_name
 
+
 class TypesSerializer(serializers.ModelSerializer):
     
     class Meta:
