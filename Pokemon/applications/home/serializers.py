@@ -136,6 +136,9 @@ class CapturarPokemomSerializer(serializers.Serializer):
     is_party_member = serializers.BooleanField()
 
 
+
+
+
 class PokemonCapturadoSerializer(serializers.ModelSerializer):
 
     specie = serializers.SerializerMethodField()
