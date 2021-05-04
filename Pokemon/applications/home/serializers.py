@@ -1,6 +1,7 @@
 from rest_framework import serializers, pagination
 from .models import *
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 
 class PagSerializer(pagination.PageNumberPagination):
@@ -98,35 +99,46 @@ class PokemonDescripcionSerializer(serializers.ModelSerializer):
     def get_habilidad(self, obj):
         #print(===>, obj.habilidad)
         hab = []
-        query = Habilidades.objects.filter(pokemon= obj.id).values("habilidad_name")
-        
+        #query1 = Habilidades.objects.filter(pokemon= obj.id).values("habilidad_name")
+        query = Habilidades.objects.filter(pokemon=obj)
+        #print("====> query1", query1)
+        #print("====>", query)
+
         for x in query:
             #print(x["habilidad_name"])
-            hab.append(x['habilidad_name'])
+            #hab.append(x['habilidad_name'])
+            hab.append(x.habilidad_name)
         #print("==>", hab)
         return hab
     
     def get_move(self, obj):
         #print(===>, obj.habilidad)
         move = []
-        query = Moves.objects.filter(pokemon= obj.id).values("moves_name")
+        #query = Moves.objects.filter(pokemon= obj.id).values("moves_name")
+        query = Moves.objects.filter(pokemon= obj)
         
         for x in query:
             #print(x["habilidad_name"])
-            move.append(x['moves_name'])
+           # move.append(x['moves_name'])
+            move.append(x.moves_name)
+
         #print("==>", hab)
         return move
  
     def get_types(self, obj):
         #print(===>, obj.habilidad)
         types = []
-        query = Types.objects.filter(pokemon= obj.id).values("types_name")
+       # query = Types.objects.filter(pokemon= obj.id).values("types_name")
+        query = Types.objects.filter(pokemon= obj)
         
         for x in query:
             #print(x["habilidad_name"])
-            types.append(x['types_name'])
+           # types.append(x['types_name'])
+            types.append(x.types_name)
+
         #print("==>", hab)
         return types
+
 
 class CapturarPokemomSerializer(serializers.Serializer):
 
@@ -134,6 +146,30 @@ class CapturarPokemomSerializer(serializers.Serializer):
     specie = serializers.IntegerField()
     nick_name = serializers.CharField()
     is_party_member = serializers.BooleanField()
+    
+    def validate_specie(self, value):
+        try:
+            Pokemon.objects.get(id=value)
+        except Pokemon.DoesNotExist:
+            raise serializers.ValidationError("Pokemon no existe.")
+        if AlmacenPokemonCapturado.objects.filter(specie=value).exists():
+            raise serializers.ValidationError("Especie de Pokemon ya capturado.")
+        return value
+    
+    def validate_nick_name(self, value):
+        x= AlmacenPokemonCapturado.objects.contar_usuario(value)
+        print("contar",x )
+
+        try:
+            User.objects.get(username=value)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("Usuario no existe.")      
+            #raise serializers.ValidationError("POkemon no existe")
+        if AlmacenPokemonCapturado.objects.contar_usuario(value) > 6:
+            raise serializers.ValidationError("Usuario tiene el limite de pokemon capturado.") 
+        return value
+
+
 
 
 
@@ -228,7 +264,7 @@ class RegionLocationSerializer(serializers.ModelSerializer):
         )
 
     def get_location(self, obj):
-        query = Location.objects.filter(region_id = obj.id)
+        query = Location.objects.filter(region = obj)
         locaciones = LocationsSerializer(query, many=True).data
         return locaciones
 
@@ -248,7 +284,7 @@ class DetallarLocationsSerializer(serializers.ModelSerializer):
 
     def get_area(self, obj):
 
-        query = Area.objects.filter(location_id= obj.id)
+        query = Area.objects.filter(location= obj)
         
         areas = AreaSerializer(query, many=True).data
         #print("====>", areas)
@@ -283,8 +319,16 @@ class UpdateAlmacenPokemon(serializers.Serializer):
 
     nick_name = serializers.CharField()
 
+    # def validate(self, pk):
+    #     try:
+    #         AlmacenPokemonCapturado.objects.get(specie=pk)
+    #     except AlmacenPokemonCapturado.DoesNotExist:
+    #         raise serializers.ValidationError("Ningun usuario tiene capturado a esa especie.")
+    
     def update(self, instance, validated_data):
-
+        #print("======> update se actualizar pokemon ", instance)
         instance.nick_name = validated_data["nick_name"]
         instance.save()
+        
         return instance
+

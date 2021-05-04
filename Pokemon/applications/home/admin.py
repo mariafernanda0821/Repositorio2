@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Region, Area, Location,Pokemon, Habilidades, Moves,
-    Sprites, Types, Stats,
+    Sprites, Types, Stats, AlmacenPokemonCapturado,
     )
 admin.site.register(Region)
 admin.site.register(Area)
@@ -12,6 +12,8 @@ admin.site.register(Moves)
 admin.site.register(Sprites)
 admin.site.register(Types)
 admin.site.register(Stats)
+admin.site.register(AlmacenPokemonCapturado)
+
 
 
 
