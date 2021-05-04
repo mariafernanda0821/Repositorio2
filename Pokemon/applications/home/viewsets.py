@@ -134,3 +134,5 @@ class LocationViewSet(viewsets.ViewSet):
         queryset = Location.objects.filter(id = pk)
         serializer = DetallarLocationsSerializer(queryset, many=True)
         return Response(serializer.data)
+
+   
